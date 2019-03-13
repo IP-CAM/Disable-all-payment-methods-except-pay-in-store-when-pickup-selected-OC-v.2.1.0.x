@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification
+	xmlns="https://github.com/vqmod/vqmod"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd"
+	>
+	<id><![CDATA[[VQMOD] Disable all payment methods except "Pay In Store" when "Pickup From Store" is selected as Shipping Method]]></id>
+	<version>1.0.0</version>
+	<vqmver>2.6.3</vqmver>
+	<author>kanenas.net (aka Nikolas Branis) - nbran@kanenas.net</author>
+	<file path="catalog/model/payment/" name="bank_transfer.php,cod.php,modirumeb.php,pp_standard.php,winbnk.php" error="log">
+		<operation error="skip">
+			<search position="after"><![CDATA[public function getMethod($address, $total) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_disable_all_payment_methods_except_pay_in_store_when_pickup_from_store_is_selected.xml (start) <<
+		if ($this->session->data['shipping_method']['code'] == 'pickup.pickup') return;
+		// kanenas: knns_disable_all_payment_methods_except_pay_in_store_when_pickup_from_store_is_selected.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/model/payment/" name="pay_in_store.php" error="log">
+		<operation error="skip">
+			<search position="after"><![CDATA[public function getMethod($address, $total) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_disable_all_payment_methods_except_pay_in_store_when_pickup_from_store_is_selected.xml (start) <<
+		if ($this->session->data['shipping_method']['code'] == 'xshippingpro.xshippingpro1' || 
+			$this->session->data['shipping_method']['code'] == 'xshippingpro.xshippingpro2'
+			) return;
+		// kanenas: knns_disable_all_payment_methods_except_pay_in_store_when_pickup_from_store_is_selected.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+</modification>
